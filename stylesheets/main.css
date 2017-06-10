@@ -1,0 +1,43 @@
+html {
+    background-color:
+
+}
+
+.container {
+    width: 1000px;
+}
+.main-content > h1 {
+    text-align: center;
+}
+
+.wrapper {
+    display:flex;
+    justify-content: center;
+    flex-wrap:wrap;
+    flex-basis: 100%;
+}
+
+.wrapper div {
+    width: 65%;
+    flex-grow: 1;
+    padding: 10px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin: 3px;
+}
+
+.calculator-btn {
+
+}
+
+.calculator-display{
+    width: 1000%;
+    margin: 0 auto;
+    padding: 2%
+    
+}
+
+#display{}
