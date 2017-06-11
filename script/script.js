@@ -24,12 +24,26 @@ $("button").click(function () {
     }
     else if ($(this).hasClass("equal")) {
         calculateAnswer()
+    }else if ($(this).hasClass("clear-operations")){
+        if($(this).val()==="clearAll"){
+        currentInput = [];
+        $("#display").val(currentInput)
+    };          
     }
 });
 var calculateAnswer = () => {
     for (var i = 0; i < currentInput.length; i++) {
         if (currentInput[i] === "+") {
-            temp = parseFloat(currentInput[i - 1]) + parseFloat(currentInput[i + 1])
+            temp = plus(parseFloat(currentInput[i - 1]) , parseFloat(currentInput[i + 1]))
+            currentInput[i + 1] = temp;
+        }else if (currentInput[i] === "-"){
+            temp = minus(parseFloat(currentInput[i - 1]), parseFloat(currentInput[i + 1]))
+            currentInput[i + 1] = temp;
+        }else if(currentInput[i] === "x"){
+            temp = multiply(parseFloat(currentInput[i - 1]), parseFloat(currentInput[i + 1]))
+            currentInput[i + 1] = temp;
+        }else if(currentInput[i] === "/"){
+             temp = divide(parseFloat(currentInput[i - 1]), parseFloat(currentInput[i + 1]))
             currentInput[i + 1] = temp;
         }
     }
