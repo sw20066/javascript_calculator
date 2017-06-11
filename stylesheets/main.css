@@ -34,9 +34,8 @@ button {
 }
 
 .calculator-display{
-    width: 1000%;
-    margin: 0 auto;
-    padding: 2%
+    text-align: center;
+    padding: 3%;
     
 }
 
