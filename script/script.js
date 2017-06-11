@@ -1,42 +1,42 @@
-var currAcc = 0;
-var previousAnswer = false;
-var currentMathOp = [];
+// ------------------- Setting Up Variables ------------------- //
 
-var operators = {
-    plus: (a,b) => a + b,
-    minus: (a,b) => a - b,
-    divide: (a,b) => a/b,
-    multiply: (a,b) => a * b;
-}
+var previousAnswer = [];
+var currentInput = []
+var temp = 0;
 
-$("button").click(function(){
-    if($(this).hasClass("number")){
-        if(currentMathOp.length === 0 || currentMathOp.length === 2){
-            currentMathOp.push($(this).val())
-        }else if(currentMathOp.length === 1){
-            currentMathOp[0] === $(this).val()
-        }
-    }else if($(this).hasClass("basic-operators") & currentMathOp.length === 1){
-        currentMathOp.push($(this).val())
-    }else if($(this).hasClass("equal") && currentMathOp === 2){
-        calculate()
+// ------------------- Setting Up Functions ------------------- //
+
+
+var plus = (a, b) => a + b;
+var minus = (a, b) => a - b;
+var divide = (a, b) => a / b;
+var multiply = (a, b) => a * b;
+
+
+// -------------------   Core Functions    ------------------- //
+
+
+
+$("button").click(function () {
+    if ($(this).hasClass("number") || $(this).hasClass("basic-operators")) {
+        currentInput.push($(this).val());
+        $("#display").val(currentInput.join(" "))
     }
+    else if ($(this).hasClass("equal")) {
+        calculateAnswer()
+    }
+});
+var calculateAnswer = () => {
+    for (var i = 0; i < currentInput.length; i++) {
+        if (currentInput[i] === "+") {
+            temp = parseFloat(currentInput[i - 1]) + parseFloat(currentInput[i + 1])
+            currentInput[i + 1] = temp;
+        }
+    }
+    $("#display").val(temp);
+    currentInput = [temp];
+};
 
-})
-
-
-calculate () => {
-    switch currentMathOp[1]
-        case "plus"
-}
 
 
 
-//            switch(operator){
-//            case "plus":
-//                operators.plus(curre)
-
-//       alert($(this).hasClass("basic-operators"));
-
-//  accumulator += Number($(this).val());
-//    $("#display").val(accumulator);
