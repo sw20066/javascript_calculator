@@ -2,13 +2,17 @@
 var previousAnswers = [];
 var currentInput = ""
 var temp;
-// ------------------- Setting Up Functions ------------------- //
+// ------------------- Basic Operators ------------------- //
 var operators = {
     plus: (a, b) => a + b,
     minus: (a, b) => a - b,
     divide: (a, b) => a / b,
     multiply: (a, b) => a * b
 }
+
+// ------------------- Clear Operators ------------------- //
+
+console.log(operators.plus(9, 9));
 var clear_operators = {
     clearAll: () => {
         currentInput = "";
@@ -21,29 +25,61 @@ var clear_operators = {
         $("#display").val(currentInput)
     },
     backSpace: () => {
+        currentInput = currentInput.substr(0, currentInput.length - 1);
+        $("#display").val(currentInput)
         console.log("Backspacing")
     }
 }
+
+
+// ------------------- Special Operators ------------------- //
+
 var special_operators = {
-    convert: () => {
+    convertToArray() {
+        currentInput = currentInput.split(" ");
+    },
+    convertToInput() {
+        currentInput = currentInput.join(" ")
+        $("#display").val(currentInput)
+    },
+    convert() {
+        this.convertToArray();
+        currentInput[currentInput.length - 1] = ((currentInput[currentInput.length - 1])/100) * currentInput[currentInput.length - 3];
         console.log("converting...");
+        this.convertToInput();
     },
-    sqrt: () => {
+    sqrt() {
+        this.convertToArray();
+        currentInput[currentInput.length - 1] = Math.sqrt(currentInput[currentInput.length - 1]);
         console.log("Square rooting...");
+        this.convertToInput();
     },
-    pow: () => {
-        console.log("Power")
+    pow() {
+        this.convertToArray();
+        currentInput[currentInput.length - 1] = Math.pow(currentInput[currentInput.length - 1], 2);
+        this.convertToInput();
     },
-    pow3: () => {
-        console.log("UNLIMITED POWER");
+    pow3() {
+        this.convertToArray();
+        currentInput[currentInput.length - 1] = Math.pow(currentInput[currentInput.length - 1], 3);
+        this.convertToInput();
     },
-    reciprocal: () => {
-        console.log("Reciporocal");
-    }, 
-    decimal: () => {
-        console.log("Decimal Operator");
+    reciprocal() {
+        this.convertToArray();
+        currentInput[currentInput.length - 1] = 1/(currentInput[currentInput.length - 1]);
+        this.convertToInput();
+    },
+    plus_minus(){
+        this.convertToArray();
+        currentInput[currentInput.length - 1] = (currentInput[currentInput.length - 1]) * (-1);
+        console.log("Square rooting...");
+        this.convertToInput();
     }
 }
+
+// ------------------- Basic Operations ------------------- //
+
+
 var calculateAnswer = () => {
     var calculatingOps = (operator) => {
         temp = currentInput.splice(i - 1, 3);
@@ -69,7 +105,8 @@ var calculateAnswer = () => {
     $("#display").val(temp);
     currentInput = "" + temp;
 };
-// -------------------   Core Functions    ------------------- //
+
+// -------------------   Event Handling Functions    ------------------- //
 $("button").click(function () {
     if ($(this).hasClass("number")) {
         currentInput += $(this).val();
