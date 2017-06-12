@@ -2,6 +2,8 @@
 var previousAnswers = [];
 var currentInput = ""
 var temp;
+var maximumCharacters = 25;
+
 // ------------------- Basic Operators ------------------- //
 var operators = {
     plus: (a, b) => a + b,
@@ -10,24 +12,35 @@ var operators = {
     multiply: (a, b) => a * b
 }
 
+// ------------------- Display Function ------------------- //
+var updateDisplay = () => {
+    $("#display").val(currentInput)
+    if (currentInput.length === maximumCharacters) {
+        $(".special-messages").text("Sorry, you have exceeded the maximum length");
+    } else if (currentInput.includes("NaN")) {
+        $(".special-messages").text("Sorry, an error occured");
+        currentInput = "Error"
+        $("#display").val(currentInput)
+        clear_operators.clearAll();
+    } else {
+        $(".special-messages").text("");
+    }
+
+}
 // ------------------- Clear Operators ------------------- //
 
 console.log(operators.plus(9, 9));
 var clear_operators = {
     clearAll: () => {
         currentInput = "";
-        $("#display").val(currentInput)
     },
     clearCurrent: () => {
         currentInput = currentInput.split(" ");
         currentInput.pop();
         currentInput = currentInput.join(" ") + " ";
-        $("#display").val(currentInput)
     },
     backSpace: () => {
         currentInput = currentInput.substr(0, currentInput.length - 1);
-        $("#display").val(currentInput)
-        console.log("Backspacing")
     }
 }
 
@@ -40,18 +53,15 @@ var special_operators = {
     },
     convertToInput() {
         currentInput = currentInput.join(" ")
-        $("#display").val(currentInput)
     },
     convert() {
         this.convertToArray();
-        currentInput[currentInput.length - 1] = ((currentInput[currentInput.length - 1])/100) * currentInput[currentInput.length - 3];
-        console.log("converting...");
+        currentInput[currentInput.length - 1] = ((currentInput[currentInput.length - 1]) / 100) * currentInput[currentInput.length - 3];
         this.convertToInput();
     },
     sqrt() {
         this.convertToArray();
         currentInput[currentInput.length - 1] = Math.sqrt(currentInput[currentInput.length - 1]);
-        console.log("Square rooting...");
         this.convertToInput();
     },
     pow() {
@@ -66,13 +76,12 @@ var special_operators = {
     },
     reciprocal() {
         this.convertToArray();
-        currentInput[currentInput.length - 1] = 1/(currentInput[currentInput.length - 1]);
+        currentInput[currentInput.length - 1] = 1 / (currentInput[currentInput.length - 1]);
         this.convertToInput();
     },
-    plus_minus(){
+    plus_minus() {
         this.convertToArray();
         currentInput[currentInput.length - 1] = (currentInput[currentInput.length - 1]) * (-1);
-        console.log("Square rooting...");
         this.convertToInput();
     }
 }
@@ -109,11 +118,14 @@ var calculateAnswer = () => {
 // -------------------   Event Handling Functions    ------------------- //
 $("button").click(function () {
     if ($(this).hasClass("number")) {
-        currentInput += $(this).val();
-        $("#display").val(currentInput);
+        if (currentInput[0] === "0") {
+            currentInput = $(this).val()
+        } else if (currentInput.length !== maximumCharacters) {
+            currentInput += $(this).val();
+        }
+
     } else if ($(this).hasClass("basic-operators")) {
         currentInput += ` ${$(this).val()} `
-        $("#display").val(currentInput);
     } else if ($(this).hasClass("equal")) {
         currentInput = currentInput.split(" ");
         calculateAnswer()
@@ -122,4 +134,5 @@ $("button").click(function () {
     } else if ($(this).hasClass("special-operators")) {
         special_operators[$(this).val()]();
     }
+    updateDisplay();
 });
