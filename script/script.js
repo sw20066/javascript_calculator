@@ -13,8 +13,9 @@ var operators = {
 }
 
 // ------------------- Display Function ------------------- //
+$("#display").focus()
 var updateDisplay = () => {
-    $("#display").val(currentInput)
+    $("#display").val(currentInput).focus()
     if (currentInput.length === maximumCharacters) {
         $(".special-messages").text("Sorry, you have exceeded the maximum length");
     } else if (currentInput.includes("NaN")) {
@@ -27,6 +28,17 @@ var updateDisplay = () => {
     }
 
 }
+
+$("input").keyup((e) => {
+     if($("#display").val() !== currentInput && e.keyCode !== 8){
+        currentInput = $("#display").val();
+    }else if(e.keyCode === 8){
+        currentInput = $("#display").val()
+    }
+    updateDisplay();
+});
+
+
 // ------------------- Clear Operators ------------------- //
 
 console.log(operators.plus(9, 9));
@@ -136,3 +148,4 @@ $("button").click(function () {
     }
     updateDisplay();
 });
+
