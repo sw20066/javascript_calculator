@@ -13,6 +13,7 @@ var operators = {
 }
 
 // ------------------- Display Function ------------------- //
+
 $("#display").focus()
 var updateDisplay = () => {
     $("#display").val(currentInput).focus()
@@ -33,7 +34,7 @@ $("input").keyup((e) => {
     var pressedKey = e.keycode ? e.keycode : e.which
     if ($("#display").val() !== currentInput && pressedKey !== 8) {
         currentInput = $("#display").val();
-        currentInput = currentInput.replace(/(\d+)([+/*-])/gi, "$1 $2 ");
+        currentInput = currentInput.replace(/(\d+)([+/*-])/gi, "$1 $2 "); //This ensures that there is always a space between numbers and operators
 
     } else if (pressedKey === 8) {
         currentInput = $("#display").val()
@@ -41,22 +42,8 @@ $("input").keyup((e) => {
     } else if (pressedKey === 13) {
         $('.equal').click();
     }
-    updateDisplay()
+    updateDisplay() //This ensures all keyboard input is updated in real time
 });
-
-//            $('input').keypress(function(event){
-//                var keycode = (event.keyCode ? event.keyCode : event.which);
-//                if(keycode == '13'){
-//                    alert('You pressed a "enter" key in textbox');  
-//                }
-//                //Stop the event from propogation to other handlers
-//                //If this line will be removed, then keypress event handler attached 
-//                //at document level will also be triggered
-//                event.stopPropagation();
-//            });
-
-
-
 
 // ------------------- Clear Operators ------------------- //
 
@@ -69,8 +56,13 @@ var clear_operators = {
         currentInput.pop();
         currentInput = currentInput.join(" ") + " ";
     },
-    backSpace: () => {
-        currentInput = currentInput.substr(0, currentInput.length - 1);
+    backSpace: () => { //As a space is always inserted between numbers and operators, this checks if there are spaces in the string when backspacing and will delete the appropriate amount of characters
+        if(currentInput.charAt(currentInput.length - 1) === " "){
+            currentInput = currentInput.substr(0, currentInput.length - 2);
+        }else {
+            currentInput = currentInput.substr(0, currentInput.length - 1);
+        }
+        
     }
 }
 
@@ -124,7 +116,7 @@ var special_operators = {
 };
 // ------------------- Basic Operations ------------------- //
 
-
+// This function finds the operator and slices the array index before and after. Afterwards it calculates the inputted numbers and puts the result to the first index of the array.
 var calculateAnswer = () => {
     var calculatingOps = (operator) => {
         temp = currentInput.splice(i - 1, 3);
@@ -132,7 +124,6 @@ var calculateAnswer = () => {
         currentInput.unshift(temp);
         i = i - 2;
     }
-
 
     for (var i = 0; i < currentInput.length; i++) {
         switch (currentInput[i]) {
@@ -147,11 +138,9 @@ var calculateAnswer = () => {
                 break;
             case "/":
                 calculatingOps("divide");
-        }
-    }
-
-
-
+        }//end switch case
+    }//end loop
+    
     $("#display").val(temp);
     currentInput = "" + temp;
 };
@@ -159,21 +148,17 @@ var calculateAnswer = () => {
 // -------------------   Event Handling Functions    ------------------- //
 $("button").click(function () {
     if ($(this).hasClass("number")) {
-        if (currentInput[0] === "0") {
+        if (currentInput[0] === "0") { //prevents having the first number in the screen as zero
             currentInput = $(this).val()
         } else if (currentInput.length !== maximumCharacters) {
             currentInput += $(this).val();
-        }
-
-    } else if ($(this).hasClass("basic-operators")) {
-
+        }//end number checking
+    } else if ($(this).hasClass("basic-operators")) { //prevents having illegal amounts of decimals 
         if (!isNaN(currentInput.charAt(currentInput.length - 2)) || currentInput.charAt(currentInput.length - 2) === ".") {
             currentInput += ` ${$(this).val()} `
-        }
-
-
+        }//end basic operator checking
     } else if ($(this).hasClass("equal")) {
-        currentInput = currentInput.split(" ");
+        currentInput = currentInput.split(" "); //The calculator uses arrays to calculate the answer
         calculateAnswer()
     } else if ($(this).hasClass("clearing-operators")) {
         clear_operators[$(this).val()]();
