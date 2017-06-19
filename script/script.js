@@ -167,10 +167,9 @@ $("button").click(function () {
 
     } else if ($(this).hasClass("basic-operators")) {
 
-        if (!isNaN(currentInput.charAt(currentInput.length - 2))) {
+        if (!isNaN(currentInput.charAt(currentInput.length - 2)) || currentInput.charAt(currentInput.length - 2) === ".") {
             currentInput += ` ${$(this).val()} `
         }
-
 
 
     } else if ($(this).hasClass("equal")) {
