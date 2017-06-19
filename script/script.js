@@ -30,18 +30,36 @@ var updateDisplay = () => {
 }
 
 $("input").keyup((e) => {
-     if($("#display").val() !== currentInput && e.keyCode !== 8){
+    var pressedKey = e.keycode ? e.keycode : e.which
+    if ($("#display").val() !== currentInput && pressedKey !== 8) {
         currentInput = $("#display").val();
-    }else if(e.keyCode === 8){
+        currentInput = currentInput.replace(/(\d+)([+/*-])/gi, "$1 $2 ");
+
+    } else if (pressedKey === 8) {
         currentInput = $("#display").val()
+
+    } else if (pressedKey === 13) {
+        $('.equal').click();
     }
-    updateDisplay();
+    updateDisplay()
 });
+
+//            $('input').keypress(function(event){
+//                var keycode = (event.keyCode ? event.keyCode : event.which);
+//                if(keycode == '13'){
+//                    alert('You pressed a "enter" key in textbox');  
+//                }
+//                //Stop the event from propogation to other handlers
+//                //If this line will be removed, then keypress event handler attached 
+//                //at document level will also be triggered
+//                event.stopPropagation();
+//            });
+
+
 
 
 // ------------------- Clear Operators ------------------- //
 
-console.log(operators.plus(9, 9));
 var clear_operators = {
     clearAll: () => {
         currentInput = "";
@@ -95,9 +113,15 @@ var special_operators = {
         this.convertToArray();
         currentInput[currentInput.length - 1] = (currentInput[currentInput.length - 1]) * (-1);
         this.convertToInput();
-    }
-}
+    },
 
+    decimal() {
+        if (currentInput.split(" ")[currentInput.split(" ").length - 1].indexOf(".") < 0 && currentInput.charAt(currentInput.length - 1) !== " ") {
+            currentInput += ".";
+        }
+    }
+
+};
 // ------------------- Basic Operations ------------------- //
 
 
@@ -108,6 +132,8 @@ var calculateAnswer = () => {
         currentInput.unshift(temp);
         i = i - 2;
     }
+
+
     for (var i = 0; i < currentInput.length; i++) {
         switch (currentInput[i]) {
             case "+":
@@ -123,6 +149,9 @@ var calculateAnswer = () => {
                 calculatingOps("divide");
         }
     }
+
+
+
     $("#display").val(temp);
     currentInput = "" + temp;
 };
@@ -137,7 +166,13 @@ $("button").click(function () {
         }
 
     } else if ($(this).hasClass("basic-operators")) {
-        currentInput += ` ${$(this).val()} `
+
+        if (!isNaN(currentInput.charAt(currentInput.length - 2))) {
+            currentInput += ` ${$(this).val()} `
+        }
+
+
+
     } else if ($(this).hasClass("equal")) {
         currentInput = currentInput.split(" ");
         calculateAnswer()
@@ -148,4 +183,3 @@ $("button").click(function () {
     }
     updateDisplay();
 });
-

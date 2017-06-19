@@ -34,7 +34,7 @@ button {
 .calculator-display{
     text-align: center;
     padding: 3%;
-
+    
 }
 
 .calculator-btn {
@@ -47,6 +47,7 @@ input[type='text']{
     height: 50px;
     width: 55%;
     font-size: 2em;
+    font-family: monospace;
 }
 
 .special-messages{
