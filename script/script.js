@@ -62,11 +62,8 @@ var clear_operators = {
         }else {
             currentInput = currentInput.substr(0, currentInput.length - 1);
         }
-        
     }
 }
-
-
 // ------------------- Special Operators ------------------- //
 
 var special_operators = {
@@ -112,7 +109,6 @@ var special_operators = {
             currentInput += ".";
         }
     }
-
 };
 // ------------------- Basic Operations ------------------- //
 
@@ -136,11 +132,13 @@ var calculateAnswer = () => {
             case "x":
                 calculatingOps("multiply");
                 break;
+            case "*":   //To allow convenient keyboard entry
+                calculatingOps("multiply");
+                break;
             case "/":
                 calculatingOps("divide");
         }//end switch case
     }//end loop
-    
     $("#display").val(temp);
     currentInput = "" + temp;
 };
